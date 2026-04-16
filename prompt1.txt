@@ -1,0 +1,12 @@
+prompt1
+
+crea un diseño con html y css basico, que contenga una portada, con el titulo, portafolio en letras pequeñas y en grande Cultura digital 2,  en letras medianas agrega la especialdiad, inteligencia artificial, abajo del titulo el texto de quien lo esta creando by jordy jes, y abajo en sentido horizontal espacio para agregar las redes sociales facebook e instagram, la portada en tonos azules, y el contendor de las cards color hueso, y las cards en color blanco con letras negras, con el boton de ver tarea, en el pie de pagina agrega, la escuela, especialidad y nombre de creador Jordy chirino balcazar.
+
+
+prompt para la tarea 3.
+
+pedirle a Claude una guía para aprender html5, en el que nos guie desde cero a conocer todas las etiquetas,conceptos y demás características necesarias para poder aprender este lenguaje, como parte de la tarea 3 de este portafolio 
+
+promt para la tarea 4
+
+pedirle a Claude una guía para aprender css3, en el que nos guie desde cero a conocer todas las clases y propiedades, conceptos y demás características necesarias para poder aprender este lenguaje, como parte de la tarea 3 de este portafolio
