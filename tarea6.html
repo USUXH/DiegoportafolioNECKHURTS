@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mundo Arduino</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #00979d, #005f63);
+      color: white;
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btn-regresar {
+      text-decoration: none;
+      background: white;
+      color: #005f63;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn-regresar:hover {
+      background: #d9f5f6;
+      transform: scale(1.05);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop') center/cover;
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: auto;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 40px auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #005f63;
+      font-size: 2rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 20px;
+    }
+
+    .card-content h3 {
+      color: #00979d;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      background: #005f63;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="top-bar">
+      <a href="index.html" class="btn-regresar">⬅ Regresar al Portafolio</a>
+      <h2>Mundo Arduino</h2>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Arduino y Hardware Compatible</h1>
+    <p>
+      Explora sensores, módulos y componentes compatibles con Arduino para crear proyectos increíbles de electrónica y automatización.
+    </p>
+  </section>
+
+  <main class="container">
+
+    <h2 class="section-title">Sensores Compatibles</h2>
+
+    <div class="cards">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=1200&auto=format&fit=crop" alt="Sensor de temperatura">
+        <div class="card-content">
+          <h3>Sensor DHT11</h3>
+          <p>
+            Sensor de temperatura y humedad ideal para proyectos de monitoreo ambiental con Arduino.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="Sensor ultrasónico">
+        <div class="card-content">
+          <h3>HC-SR04</h3>
+          <p>
+            Sensor ultrasónico utilizado para medir distancias en robots y sistemas automáticos.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1555617117-08fda3c4b83b?q=80&w=1200&auto=format&fit=crop" alt="Sensor PIR">
+        <div class="card-content">
+          <h3>Sensor PIR</h3>
+          <p>
+            Detecta movimiento mediante infrarrojos, ideal para alarmas y automatización.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:60px;">Hardware Compatible</h2>
+
+    <div class="cards">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?q=80&w=1200&auto=format&fit=crop" alt="Arduino UNO">
+        <div class="card-content">
+          <h3>Arduino UNO</h3>
+          <p>
+            La placa más popular para principiantes y proyectos de electrónica educativa.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?q=80&w=1200&auto=format&fit=crop" alt="Módulo Relay">
+        <div class="card-content">
+          <h3>Módulo Relay</h3>
+          <p>
+            Permite controlar dispositivos eléctricos como focos, motores y electrodomésticos.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1563770660941-10a6360763a7?q=80&w=1200&auto=format&fit=crop" alt="Pantalla LCD">
+        <div class="card-content">
+          <h3>Pantalla LCD 16x2</h3>
+          <p>
+            Pantalla alfanumérica para mostrar datos, sensores y mensajes en tiempo real.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 Mundo Arduino | Diseñado con HTML5 y CSS3</p>
+  </footer>
+
+</body>
+</html>
