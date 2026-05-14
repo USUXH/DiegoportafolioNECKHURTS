@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Python — Conceptos Esenciales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;700;800&family=Source+Serif+4:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f13;
+    --bg2: #16161d;
+    --bg3: #1e1e2a;
+    --surface: #232333;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8e6f0;
+    --muted: #8a87a0;
+    --py-blue: #4a9eff;
+    --py-yellow: #ffd43b;
+    --py-green: #69db7c;
+    --py-pink: #f783ac;
+    --py-orange: #ffa94d;
+    --py-violet: #cc5de8;
+    --py-teal: #3bc9db;
+    --accent: #ffd43b;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(74,158,255,0.12), transparent);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(255,255,255,0.02) 39px,
+      rgba(255,255,255,0.02) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 39px,
+      rgba(255,255,255,0.02) 39px,
+      rgba(255,255,255,0.02) 40px
+    );
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(74,158,255,0.12);
+    border: 1px solid rgba(74,158,255,0.25);
+    color: var(--py-blue);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .hero-logo {
+    font-size: 5rem;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 0 40px rgba(74,158,255,0.3));
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--py-blue) 0%, var(--py-yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 2rem;
+    font-style: italic;
+  }
+
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .toc a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .toc a:hover { color: var(--accent); border-color: rgba(255,212,59,0.3); }
+
+  /* MAIN LAYOUT */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  /* SECTION */
+  .section { scroll-margin-top: 2rem; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 36px;
+  }
+
+  .section-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  .section h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .section-desc {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    font-style: italic;
+    max-width: 600px;
+  }
+
+  /* CARDS GRID */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+
+  .card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  .card p {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  /* CODE BLOCK */
+  .code {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre;
+    color: #c9c7d9;
+  }
+
+  /* SYNTAX COLORING */
+  .kw   { color: #cc5de8; }
+  .str  { color: #69db7c; }
+  .num  { color: #ffa94d; }
+  .fn   { color: #4a9eff; }
+  .cmt  { color: #555370; font-style: italic; }
+  .cls  { color: #ffd43b; }
+  .op   { color: #f783ac; }
+  .bi   { color: #3bc9db; }
+
+  /* TWO-COL LAYOUT */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: rgba(74,158,255,0.06);
+    border: 1px solid rgba(74,158,255,0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 16px;
+  }
+
+  .highlight-box.yellow {
+    background: rgba(255,212,59,0.06);
+    border-color: rgba(255,212,59,0.2);
+  }
+  .highlight-box.green {
+    background: rgba(105,219,124,0.06);
+    border-color: rgba(105,219,124,0.2);
+  }
+  .highlight-box.pink {
+    background: rgba(247,131,172,0.06);
+    border-color: rgba(247,131,172,0.2);
+  }
+  .highlight-box.violet {
+    background: rgba(204,93,232,0.06);
+    border-color: rgba(204,93,232,0.2);
+  }
+
+  .highlight-box h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* CONCEPT PILL */
+  .pill {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 3px 10px;
+    margin: 3px 2px;
+    color: var(--muted);
+  }
+
+  /* DATA TYPES TABLE */
+  .types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  .type-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .type-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+
+  .type-card p { font-size: 0.8rem; color: var(--muted); margin: 0; }
+
+  /* VISUAL DIAGRAM */
+  .diagram {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2rem;
+    margin-bottom: 16px;
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 12px;
+  }
+
+  .flow-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), rgba(255,255,255,0.12));
+    margin: 0 4px;
+    position: relative;
+    min-width: 20px;
+  }
+  .flow-arrow::after {
+    content: '▶';
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 8px;
+    color: var(--muted);
+  }
+
+  /* OOPP VISUAL */
+  .class-box {
+    background: var(--bg2);
+    border: 2px solid rgba(255,212,59,0.25);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .class-header {
+    background: rgba(255,212,59,0.1);
+    border-bottom: 1px solid rgba(255,212,59,0.2);
+    padding: 10px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--py-yellow);
+    font-weight: 700;
+  }
+  .class-body { padding: 12px 16px; }
+  .class-body p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .class-body p:last-child { margin-bottom: 0; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  footer p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  footer span { color: var(--py-yellow); }
+
+  /* VISUAL SNAKE */
+  .snake-svg { display: block; margin: 0 auto 1rem; opacity: 0.9; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero > * { animation: fadeUp 0.6s ease both; }
+  .hero > *:nth-child(1) { animation-delay: 0.05s; }
+  .hero > *:nth-child(2) { animation-delay: 0.15s; }
+  .hero > *:nth-child(3) { animation-delay: 0.25s; }
+  .hero > *:nth-child(4) { animation-delay: 0.35s; }
+  .hero > *:nth-child(5) { animation-delay: 0.45s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    main { padding: 2rem 1rem; gap: 3.5rem; }
+    .hero { padding: 3rem 1.5rem 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hero">
+  <div class="hero-badge">🐍 Python · Guía de Conceptos</div>
+
+  <!-- SVG Python Logo hecho a mano -->
+  <svg class="snake-svg" width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="pyBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#4a9eff"/>
+        <stop offset="100%" stop-color="#306fe0"/>
+      </linearGradient>
+      <linearGradient id="pyYellow" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ffd43b"/>
+        <stop offset="100%" stop-color="#e8b800"/>
+      </linearGradient>
+    </defs>
+    <!-- Blue snake top -->
+    <path d="M40 8 C25 8, 14 16, 14 28 L14 36 C14 40, 17 42, 21 42 L40 42 C44 42, 46 44, 46 48 L46 58 C46 62, 43 64, 40 64 L26 64" 
+          fill="none" stroke="url(#pyBlue)" stroke-width="10" stroke-linecap="round"/>
+    <!-- Yellow snake bottom -->
+    <path d="M40 72 C55 72, 66 64, 66 52 L66 44 C66 40, 63 38, 59 38 L40 38 C36 38, 34 36, 34 32 L34 22 C34 18, 37 16, 40 16 L54 16" 
+          fill="none" stroke="url(#pyYellow)" stroke-width="10" stroke-linecap="round"/>
+    <!-- Eyes -->
+    <circle cx="22" cy="20" r="3" fill="white" opacity="0.9"/>
+    <circle cx="58" cy="60" r="3" fill="white" opacity="0.9"/>
+    <circle cx="22" cy="20" r="1.2" fill="#0a0a14"/>
+    <circle cx="58" cy="60" r="1.2" fill="#0a0a14"/>
+  </svg>
+
+  <h1>Guía de <span>Python</span></h1>
+  <p>Conceptos fundamentales del lenguaje más elegante del mundo</p>
+  <nav class="toc" aria-label="Tabla de contenidos">
+    <a href="#variables">Variables</a>
+    <a href="#tipos">Tipos de datos</a>
+    <a href="#operadores">Operadores</a>
+    <a href="#control">Control de flujo</a>
+    <a href="#funciones">Funciones</a>
+    <a href="#colecciones">Colecciones</a>
+    <a href="#oop">POO</a>
+    <a href="#excepciones">Excepciones</a>
+    <a href="#modulos">Módulos</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- 01 VARIABLES -->
+  <section class="section" id="variables">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <div class="section-icon" style="background:rgba(74,158,255,0.12);">📦</div>
+      <h2 style="color: var(--py-blue);">Variables y Tipos</h2>
+    </div>
+    <p class="section-desc">En Python las variables son etiquetas que apuntan a objetos en memoria. No se declara el tipo — se infiere automáticamente.</p>
+
+    <div class="two-col">
+      <div>
+        <div class="highlight-box">
+          <h4>🔵 Declaración</h4>
+          <div class="code"><span class="cmt"># Sin declarar tipo explícito</span>
+<span class="bi">nombre</span> <span class="op">=</span> <span class="str">"Python"</span>
+<span class="bi">version</span> <span class="op">=</span> <span class="num">3.12</span>
+<span class="bi">activo</span> <span class="op">=</span> <span class="kw">True</span>
+<span class="bi">nada</span> <span class="op">=</span> <span class="kw">None</span>
+
+<span class="cmt"># Múltiple asignación</span>
+<span class="bi">x</span>, <span class="bi">y</span>, <span class="bi">z</span> <span class="op">=</span> <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span></div>
+        </div>
+
+        <div class="highlight-box yellow">
+          <h4>🟡 Type Hints (Python 3.5+)</h4>
+          <div class="code"><span class="bi">edad</span>: <span class="cls">int</span> <span class="op">=</span> <span class="num">25</span>
+<span class="bi">precio</span>: <span class="cls">float</span> <span class="op">=</span> <span class="num">9.99</span>
+<span class="bi">mensaje</span>: <span class="cls">str</span> <span class="op">=</span> <span class="str">"Hola"</span>
+<span class="bi">items</span>: <span class="cls">list</span>[<span class="cls">str</span>] <span class="op">=</span> []</div>
+        </div>
+      </div>
+      <div>
+        <div class="highlight-box green">
+          <h4>🟢 Naming Conventions</h4>
+          <div class="code"><span class="cmt"># snake_case para variables</span>
+<span class="bi">mi_variable</span> <span class="op">=</span> <span class="str">"bien"</span>
+
+<span class="cmt"># SCREAMING_SNAKE para constantes</span>
+<span class="bi">PI</span> <span class="op">=</span> <span class="num">3.14159</span>
+<span class="bi">MAX_SIZE</span> <span class="op">=</span> <span class="num">100</span>
+
+<span class="cmt"># PascalCase para clases</span>
+<span class="kw">class</span> <span class="cls">MiClase</span>:
+    <span class="kw">pass</span></div>
+        </div>
+
+        <div class="highlight-box pink">
+          <h4>🩷 type() e isinstance()</h4>
+          <div class="code"><span class="fn">type</span>(<span class="num">42</span>)         <span class="cmt"># &lt;class 'int'&gt;</span>
+<span class="fn">type</span>(<span class="str">"hola"</span>)     <span class="cmt"># &lt;class 'str'&gt;</span>
+<span class="fn">isinstance</span>(<span class="num">3</span>, <span class="cls">int</span>)  <span class="cmt"># True</span>
+<span class="fn">isinstance</span>(<span class="str">"a"</span>, (<span class="cls">str</span>, <span class="cls">int</span>))  <span class="cmt"># True</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 TIPOS DE DATOS -->
+  <section class="section" id="tipos">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <div class="section-icon" style="background:rgba(255,212,59,0.12);">🗂️</div>
+      <h2 style="color: var(--py-yellow);">Tipos de Datos</h2>
+    </div>
+    <p class="section-desc">Python es fuertemente tipado pero dinámico. Conoce los tipos nativos y sus características.</p>
+
+    <div class="types-grid" style="margin-bottom:20px;">
+      <div class="type-card">
+        <div class="type-badge" style="background:rgba(74,158,255,0.15);color:var(--py-blue);">int</div>
+        <p>Enteros de precisión arbitraria</p>
+        <div class="code" style="margin-top:8px;font-size:11px;text-align:left;">x = 42
+y = -100
+z = 10_000</div>
+      </div>
+      <div class="type-card">
+        <div class="type-badge" style="background:rgba(255,169,77,0.15);color:var(--py-orange);">float</div>
+        <p>Números de punto flotante IEEE 754</p>
+        <div class="code" style="margin-top:8px;font-size:11px;text-align:left;">pi = 3.14
+e = 2.718e0</div>
+      </div>
+      <div class="type-card">
+        <div class="type-badge" style="background:rgba(105,219,124,0.15);color:var(--py-green);">str</div>
+        <p>Cadenas inmutables Unicode</p>
+        <div class="code" style="margin-top:8px;font-size:11px;text-align:left;">s = "hola"
+f = f"{s}!"
+r = r"\n"</div>
+      </div>
+      <div class="type-card">
+        <div class="type-badge" style="background:rgba(247,131,172,0.15);color:var(--py-pink);">bool</div>
+        <p>True / False (subclase de int)</p>
+        <div class="code" style="margin-top:8px;font-size:11px;text-align:left;">a = True
+b = False
+c = bool(0)</div>
+      </div>
+      <div class="type-card">
+        <div class="type-badge" style="background:rgba(59,201,219,0.15);color:var(--py-teal);">bytes</div>
+        <p>Secuencia de bytes inmutable</p>
+        <div class="code" style="margin-top:8px;font-size:11px;text-align:left;">b = b"datos"
+b2 = bytes(4)</div>
+      </div>
+      <div class="type-card">
+        <div class="type-badge" style="background:rgba(204,93,232,0.15);color:var(--py-violet);">complex</div>
+        <p>Números complejos</p>
+        <div class="code" style="margin-top:8px;font-size:11px;text-align:left;">c = 3 + 2j
+c.real # 3.0
+c.imag # 2.0</div>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <h4>🔵 F-Strings (Python 3.6+) — la forma moderna</h4>
+      <div class="code"><span class="bi">nombre</span> <span class="op">=</span> <span class="str">"Mundo"</span>
+<span class="bi">version</span> <span class="op">=</span> <span class="num">3.12</span>
+<span class="bi">pi</span> <span class="op">=</span> <span class="num">3.14159</span>
+
+<span class="fn">print</span>(<span class="str">f"Hola, </span>{<span class="bi">nombre</span>}<span class="str">!"</span>)                <span class="cmt"># Hola, Mundo!</span>
+<span class="fn">print</span>(<span class="str">f"Python </span>{<span class="bi">version</span>}<span class="str">"</span>)               <span class="cmt"># Python 3.12</span>
+<span class="fn">print</span>(<span class="str">f"Pi = </span>{<span class="bi">pi</span><span class="op">:.2f</span>}<span class="str">"</span>)                 <span class="cmt"># Pi = 3.14</span>
+<span class="fn">print</span>(<span class="str">f"</span>{<span class="num">42</span> <span class="op">*</span> <span class="num">2</span> <span class="op">=</span>}<span class="str">"</span>)                     <span class="cmt"># 42 * 2 = 84</span></div>
+    </div>
+  </section>
+
+  <!-- 03 OPERADORES -->
+  <section class="section" id="operadores">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <div class="section-icon" style="background:rgba(247,131,172,0.12);">⚡</div>
+      <h2 style="color: var(--py-pink);">Operadores</h2>
+    </div>
+    <p class="section-desc">Python ofrece operadores aritméticos, de comparación, lógicos, bit a bit y de identidad/pertenencia.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Aritméticos</div>
+        <div class="code"><span class="num">10</span> <span class="op">+</span> <span class="num">3</span>   <span class="cmt"># 13  suma</span>
+<span class="num">10</span> <span class="op">-</span> <span class="num">3</span>   <span class="cmt"># 7   resta</span>
+<span class="num">10</span> <span class="op">*</span> <span class="num">3</span>   <span class="cmt"># 30  multiplicación</span>
+<span class="num">10</span> <span class="op">/</span> <span class="num">3</span>   <span class="cmt"># 3.33 división</span>
+<span class="num">10</span> <span class="op">//</span> <span class="num">3</span>  <span class="cmt"># 3   división entera</span>
+<span class="num">10</span> <span class="op">%</span> <span class="num">3</span>   <span class="cmt"># 1   módulo</span>
+<span class="num">2</span> <span class="op">**</span> <span class="num">8</span>   <span class="cmt"># 256 potencia</span></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Comparación</div>
+        <div class="code"><span class="num">5</span> <span class="op">==</span> <span class="num">5</span>   <span class="cmt"># True  igual</span>
+<span class="num">5</span> <span class="op">!=</span> <span class="num">3</span>   <span class="cmt"># True  distinto</span>
+<span class="num">5</span> <span class="op">></span> <span class="num">3</span>    <span class="cmt"># True  mayor</span>
+<span class="num">5</span> <span class="op"><</span> <span class="num">3</span>    <span class="cmt"># False menor</span>
+<span class="num">5</span> <span class="op">>=</span> <span class="num">5</span>   <span class="cmt"># True  mayor/igual</span>
+<span class="num">5</span> <span class="op"><=</span> <span class="num">6</span>   <span class="cmt"># True  menor/igual</span></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Lógicos</div>
+        <div class="code"><span class="kw">True</span> <span class="op">and</span> <span class="kw">False</span>  <span class="cmt"># False</span>
+<span class="kw">True</span> <span class="op">or</span> <span class="kw">False</span>   <span class="cmt"># True</span>
+<span class="op">not</span> <span class="kw">True</span>        <span class="cmt"># False</span>
+
+<span class="cmt"># Short-circuit evaluation</span>
+<span class="bi">x</span> <span class="op">=</span> <span class="kw">None</span>
+<span class="bi">y</span> <span class="op">=</span> <span class="bi">x</span> <span class="op">or</span> <span class="str">"default"</span>  <span class="cmt"># "default"</span></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Identidad y Pertenencia</div>
+        <div class="code"><span class="bi">a</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>]
+<span class="bi">b</span> <span class="op">=</span> <span class="bi">a</span>
+<span class="bi">b</span> <span class="op">is</span> <span class="bi">a</span>       <span class="cmt"># True  misma ref</span>
+<span class="bi">b</span> <span class="op">is not</span> <span class="bi">a</span>   <span class="cmt"># False</span>
+
+<span class="num">3</span> <span class="op">in</span> [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>]  <span class="cmt"># True</span>
+<span class="str">"a"</span> <span class="op">in</span> <span class="str">"abc"</span>  <span class="cmt"># True</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 CONTROL DE FLUJO -->
+  <section class="section" id="control">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <div class="section-icon" style="background:rgba(105,219,124,0.12);">🔀</div>
+      <h2 style="color: var(--py-green);">Control de Flujo</h2>
+    </div>
+    <p class="section-desc">Condicionales, bucles y el nuevo match-case para controlar la ejecución del programa.</p>
+
+    <div class="two-col">
+      <div>
+        <div class="highlight-box green">
+          <h4>🟢 if / elif / else</h4>
+          <div class="code"><span class="bi">x</span> <span class="op">=</span> <span class="num">42</span>
+
+<span class="kw">if</span> <span class="bi">x</span> <span class="op">></span> <span class="num">100</span>:
+    <span class="fn">print</span>(<span class="str">"grande"</span>)
+<span class="kw">elif</span> <span class="bi">x</span> <span class="op">></span> <span class="num">10</span>:
+    <span class="fn">print</span>(<span class="str">"mediano"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"pequeño"</span>)
+
+<span class="cmt"># Ternario</span>
+<span class="bi">msg</span> <span class="op">=</span> <span class="str">"par"</span> <span class="kw">if</span> <span class="bi">x</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span> <span class="kw">else</span> <span class="str">"impar"</span></div>
+        </div>
+
+        <div class="highlight-box violet">
+          <h4>🟣 match-case (Python 3.10+)</h4>
+          <div class="code"><span class="bi">cmd</span> <span class="op">=</span> <span class="str">"quit"</span>
+
+<span class="kw">match</span> <span class="bi">cmd</span>:
+    <span class="kw">case</span> <span class="str">"quit"</span>:
+        <span class="fn">print</span>(<span class="str">"Saliendo"</span>)
+    <span class="kw">case</span> <span class="str">"help"</span>:
+        <span class="fn">print</span>(<span class="str">"Ayuda"</span>)
+    <span class="kw">case</span> <span class="bi">_</span>:
+        <span class="fn">print</span>(<span class="str">"Desconocido"</span>)</div>
+        </div>
+      </div>
+      <div>
+        <div class="highlight-box">
+          <h4>🔵 for / while</h4>
+          <div class="code"><span class="cmt"># for con range</span>
+<span class="kw">for</span> <span class="bi">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">print</span>(<span class="bi">i</span>)  <span class="cmt"># 0 1 2 3 4</span>
+
+<span class="cmt"># for con enumerate</span>
+<span class="kw">for</span> <span class="bi">i</span>, <span class="bi">v</span> <span class="kw">in</span> <span class="fn">enumerate</span>([<span class="str">"a"</span>,<span class="str">"b"</span>]):
+    <span class="fn">print</span>(<span class="bi">i</span>, <span class="bi">v</span>)
+
+<span class="cmt"># while con break/continue</span>
+<span class="bi">n</span> <span class="op">=</span> <span class="num">0</span>
+<span class="kw">while</span> <span class="bi">n</span> <span class="op"><</span> <span class="num">5</span>:
+    <span class="kw">if</span> <span class="bi">n</span> <span class="op">==</span> <span class="num">3</span>: <span class="kw">break</span>
+    <span class="bi">n</span> <span class="op">+=</span> <span class="num">1</span></div>
+        </div>
+
+        <div class="highlight-box yellow">
+          <h4>🟡 Comprehensions</h4>
+          <div class="code"><span class="cmt"># Lista</span>
+<span class="bi">cuadrados</span> <span class="op">=</span> [<span class="bi">x</span><span class="op">**</span><span class="num">2</span> <span class="kw">for</span> <span class="bi">x</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>)]
+
+<span class="cmt"># Con condición</span>
+<span class="bi">pares</span> <span class="op">=</span> [<span class="bi">x</span> <span class="kw">for</span> <span class="bi">x</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>) <span class="kw">if</span> <span class="bi">x</span><span class="op">%</span><span class="num">2</span><span class="op">==</span><span class="num">0</span>]
+
+<span class="cmt"># Diccionario</span>
+<span class="bi">d</span> <span class="op">=</span> {<span class="bi">k</span>: <span class="bi">k</span><span class="op">**</span><span class="num">2</span> <span class="kw">for</span> <span class="bi">k</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>)}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 FUNCIONES -->
+  <section class="section" id="funciones">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <div class="section-icon" style="background:rgba(59,201,219,0.12);">⚙️</div>
+      <h2 style="color: var(--py-teal);">Funciones</h2>
+    </div>
+    <p class="section-desc">Las funciones son ciudadanos de primera clase en Python. Pueden pasarse como argumentos, retornarse y asignarse a variables.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Definición básica</div>
+        <div class="code"><span class="kw">def</span> <span class="fn">saludar</span>(<span class="bi">nombre</span>: <span class="cls">str</span>) <span class="op">-></span> <span class="cls">str</span>:
+    <span class="str">"""Retorna un saludo."""</span>
+    <span class="kw">return</span> <span class="str">f"Hola, </span>{<span class="bi">nombre</span>}<span class="str">!"</span>
+
+<span class="cmt"># Parámetros con default</span>
+<span class="kw">def</span> <span class="fn">potencia</span>(<span class="bi">base</span>, <span class="bi">exp</span><span class="op">=</span><span class="num">2</span>):
+    <span class="kw">return</span> <span class="bi">base</span> <span class="op">**</span> <span class="bi">exp</span></div>
+      </div>
+      <div class="card">
+        <div class="card-label">*args y **kwargs</div>
+        <div class="code"><span class="kw">def</span> <span class="fn">suma</span>(<span class="op">*</span><span class="bi">nums</span>):
+    <span class="kw">return</span> <span class="fn">sum</span>(<span class="bi">nums</span>)
+
+<span class="fn">suma</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)  <span class="cmt"># 10</span>
+
+<span class="kw">def</span> <span class="fn">info</span>(<span class="op">**</span><span class="bi">datos</span>):
+    <span class="kw">for</span> <span class="bi">k</span>, <span class="bi">v</span> <span class="kw">in</span> <span class="bi">datos</span>.<span class="fn">items</span>():
+        <span class="fn">print</span>(<span class="str">f"{<span class="bi">k</span>}: {<span class="bi">v</span>}"</span>)
+
+<span class="fn">info</span>(<span class="bi">nombre</span><span class="op">=</span><span class="str">"Ana"</span>, <span class="bi">edad</span><span class="op">=</span><span class="num">30</span>)</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Lambda y funciones de orden superior</div>
+        <div class="code"><span class="cmt"># Lambda</span>
+<span class="bi">doble</span> <span class="op">=</span> <span class="kw">lambda</span> <span class="bi">x</span>: <span class="bi">x</span> <span class="op">*</span> <span class="num">2</span>
+
+<span class="cmt"># map, filter, reduce</span>
+<span class="bi">nums</span> <span class="op">=</span> [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>]
+<span class="bi">dobles</span> <span class="op">=</span> <span class="fn">list</span>(<span class="fn">map</span>(<span class="bi">doble</span>, <span class="bi">nums</span>))
+<span class="bi">pares</span>  <span class="op">=</span> <span class="fn">list</span>(<span class="fn">filter</span>(<span class="kw">lambda</span> <span class="bi">x</span>: <span class="bi">x</span><span class="op">%</span><span class="num">2</span><span class="op">==</span><span class="num">0</span>, <span class="bi">nums</span>))
+
+<span class="cmt"># Sorted con key</span>
+<span class="fn">sorted</span>(<span class="bi">nums</span>, <span class="bi">key</span><span class="op">=</span><span class="kw">lambda</span> <span class="bi">x</span>: <span class="op">-</span><span class="bi">x</span>)</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Decoradores</div>
+        <div class="code"><span class="kw">def</span> <span class="fn">log</span>(<span class="bi">func</span>):
+    <span class="kw">def</span> <span class="fn">wrapper</span>(<span class="op">*</span><span class="bi">a</span>, <span class="op">**</span><span class="bi">k</span>):
+        <span class="fn">print</span>(<span class="str">f"→ {<span class="bi">func</span>.__name__}"</span>)
+        <span class="kw">return</span> <span class="fn">func</span>(<span class="op">*</span><span class="bi">a</span>, <span class="op">**</span><span class="bi">k</span>)
+    <span class="kw">return</span> <span class="bi">wrapper</span>
+
+<span class="op">@</span><span class="fn">log</span>
+<span class="kw">def</span> <span class="fn">saludar</span>():
+    <span class="fn">print</span>(<span class="str">"Hola!"</span>)
+
+<span class="fn">saludar</span>()  <span class="cmt"># → saludar \n Hola!</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 COLECCIONES -->
+  <section class="section" id="colecciones">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <div class="section-icon" style="background:rgba(255,169,77,0.12);">🗃️</div>
+      <h2 style="color: var(--py-orange);">Colecciones</h2>
+    </div>
+    <p class="section-desc">Cuatro estructuras de datos fundamentales: lista, tupla, diccionario y conjunto.</p>
+
+    <div class="cards">
+      <div class="card" style="border-color: rgba(74,158,255,0.2);">
+        <div class="card-label" style="color: var(--py-blue);">list — mutable, ordenada</div>
+        <div class="code"><span class="bi">l</span> <span class="op">=</span> [<span class="num">1</span>, <span class="str">"dos"</span>, <span class="num">3.0</span>, <span class="kw">True</span>]
+<span class="bi">l</span>.<span class="fn">append</span>(<span class="num">5</span>)
+<span class="bi">l</span>.<span class="fn">insert</span>(<span class="num">0</span>, <span class="num">0</span>)
+<span class="bi">l</span>.<span class="fn">pop</span>()
+<span class="bi">l</span>[<span class="num">1</span>:<span class="num">3</span>]        <span class="cmt"># slicing</span>
+<span class="bi">l</span>[<span class="op">::</span><span class="op">-</span><span class="num">1</span>]       <span class="cmt"># invertir</span>
+<span class="fn">len</span>(<span class="bi">l</span>)        <span class="cmt"># longitud</span></div>
+      </div>
+      <div class="card" style="border-color: rgba(247,131,172,0.2);">
+        <div class="card-label" style="color: var(--py-pink);">tuple — inmutable, ordenada</div>
+        <div class="code"><span class="bi">t</span> <span class="op">=</span> (<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)
+<span class="bi">x</span>, <span class="bi">y</span>, <span class="bi">z</span> <span class="op">=</span> <span class="bi">t</span>   <span class="cmt"># unpacking</span>
+<span class="bi">t</span>[<span class="num">0</span>]           <span class="cmt"># 1</span>
+<span class="bi">t</span>.<span class="fn">count</span>(<span class="num">1</span>)    <span class="cmt"># 1</span>
+<span class="bi">t</span>.<span class="fn">index</span>(<span class="num">2</span>)    <span class="cmt"># 1</span>
+
+<span class="cmt"># Named tuple</span>
+<span class="kw">from</span> <span class="bi">collections</span> <span class="kw">import</span> <span class="cls">namedtuple</span>
+<span class="cls">Punto</span> <span class="op">=</span> <span class="fn">namedtuple</span>(<span class="str">"Punto"</span>, <span class="str">"x y"</span>)</div>
+      </div>
+      <div class="card" style="border-color: rgba(255,212,59,0.2);">
+        <div class="card-label" style="color: var(--py-yellow);">dict — clave-valor, ordenado (3.7+)</div>
+        <div class="code"><span class="bi">d</span> <span class="op">=</span> {<span class="str">"nombre"</span>: <span class="str">"Ana"</span>, <span class="str">"edad"</span>: <span class="num">30</span>}
+<span class="bi">d</span>[<span class="str">"email"</span>] <span class="op">=</span> <span class="str">"a@b.com"</span>
+<span class="bi">d</span>.<span class="fn">get</span>(<span class="str">"x"</span>, <span class="str">"default"</span>)
+<span class="bi">d</span>.<span class="fn">keys</span>()
+<span class="bi">d</span>.<span class="fn">values</span>()
+<span class="bi">d</span>.<span class="fn">items</span>()
+<span class="kw">del</span> <span class="bi">d</span>[<span class="str">"edad"</span>]</div>
+      </div>
+      <div class="card" style="border-color: rgba(105,219,124,0.2);">
+        <div class="card-label" style="color: var(--py-green);">set — sin duplicados, no ordenado</div>
+        <div class="code"><span class="bi">s</span> <span class="op">=</span> {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">2</span>, <span class="num">1</span>}  <span class="cmt"># {1,2,3}</span>
+<span class="bi">s</span>.<span class="fn">add</span>(<span class="num">4</span>)
+<span class="bi">s</span>.<span class="fn">discard</span>(<span class="num">2</span>)
+<span class="bi">s</span> <span class="op">|</span> {<span class="num">5</span>}    <span class="cmt"># unión</span>
+<span class="bi">s</span> <span class="op">&</span> {<span class="num">1</span>,<span class="num">3</span>}  <span class="cmt"># intersección</span>
+<span class="bi">s</span> <span class="op">-</span> {<span class="num">1</span>}    <span class="cmt"># diferencia</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 POO -->
+  <section class="section" id="oop">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <div class="section-icon" style="background:rgba(255,212,59,0.12);">🏗️</div>
+      <h2 style="color: var(--py-yellow);">Programación Orientada a Objetos</h2>
+    </div>
+    <p class="section-desc">Clases, herencia, encapsulamiento y polimorfismo — los cuatro pilares de la POO en Python.</p>
+
+    <div class="two-col">
+      <div>
+        <div class="class-box">
+          <div class="class-header">class Animal</div>
+          <div class="class-body">
+            <p style="color:var(--muted);">atributos: nombre, sonido</p>
+            <p style="color:var(--py-teal);">métodos: __init__, hablar, __repr__</p>
+          </div>
+        </div>
+        <div style="text-align:center; color: var(--muted); font-size:20px; margin: 4px 0;">↓</div>
+        <div class="class-box" style="border-color: rgba(74,158,255,0.25);">
+          <div class="class-header" style="background:rgba(74,158,255,0.1); border-color:rgba(74,158,255,0.2); color:var(--py-blue);">class Perro(Animal)</div>
+          <div class="class-body">
+            <p style="color:var(--muted);">hereda: nombre, sonido, hablar</p>
+            <p style="color:var(--py-blue);">sobrescribe: hablar</p>
+            <p style="color:var(--py-teal);">agrega: raza, traer</p>
+          </div>
+        </div>
+        <div style="text-align:center; color: var(--muted); font-size:20px; margin: 4px 0;">↓</div>
+        <div class="class-box" style="border-color: rgba(105,219,124,0.25);">
+          <div class="class-header" style="background:rgba(105,219,124,0.1); border-color:rgba(105,219,124,0.2); color:var(--py-green);">instancia = Perro("Rex", "Labrador")</div>
+          <div class="class-body">
+            <p style="color:var(--muted);">instancia.hablar() → "Rex dice: ¡Guau!"</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="code"><span class="kw">class</span> <span class="cls">Animal</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="bi">self</span>, <span class="bi">nombre</span>, <span class="bi">sonido</span>):
+        <span class="bi">self</span>.<span class="bi">nombre</span> <span class="op">=</span> <span class="bi">nombre</span>
+        <span class="bi">self</span>.<span class="bi">_sonido</span> <span class="op">=</span> <span class="bi">sonido</span>  <span class="cmt"># "privado"</span>
+
+    <span class="kw">def</span> <span class="fn">hablar</span>(<span class="bi">self</span>):
+        <span class="kw">return</span> <span class="str">f"{<span class="bi">self</span>.nombre} dice: {<span class="bi">self</span>._sonido}"</span>
+
+    <span class="kw">def</span> <span class="fn">__repr__</span>(<span class="bi">self</span>):
+        <span class="kw">return</span> <span class="str">f"Animal({<span class="bi">self</span>.nombre!r})"</span>
+
+
+<span class="kw">class</span> <span class="cls">Perro</span>(<span class="cls">Animal</span>):
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="bi">self</span>, <span class="bi">nombre</span>, <span class="bi">raza</span>):
+        <span class="fn">super</span>().<span class="fn">__init__</span>(<span class="bi">nombre</span>, <span class="str">"¡Guau!"</span>)
+        <span class="bi">self</span>.<span class="bi">raza</span> <span class="op">=</span> <span class="bi">raza</span>
+
+    <span class="kw">def</span> <span class="fn">hablar</span>(<span class="bi">self</span>):  <span class="cmt"># polimorfismo</span>
+        <span class="kw">return</span> <span class="str">f"{<span class="bi">self</span>.nombre} dice: ¡Guau!"</span>
+
+    <span class="op">@</span><span class="bi">property</span>
+    <span class="kw">def</span> <span class="fn">info</span>(<span class="bi">self</span>):
+        <span class="kw">return</span> <span class="str">f"{<span class="bi">self</span>.nombre} ({<span class="bi">self</span>.raza})"</span>
+
+
+<span class="bi">rex</span> <span class="op">=</span> <span class="fn">Perro</span>(<span class="str">"Rex"</span>, <span class="str">"Labrador"</span>)
+<span class="bi">rex</span>.<span class="fn">hablar</span>()   <span class="cmt"># Rex dice: ¡Guau!</span>
+<span class="fn">isinstance</span>(<span class="bi">rex</span>, <span class="cls">Animal</span>)  <span class="cmt"># True</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 16px;">
+      <div class="highlight-box yellow">
+        <h4>🟡 Dataclasses (Python 3.7+) — la forma moderna</h4>
+        <div class="code"><span class="kw">from</span> <span class="bi">dataclasses</span> <span class="kw">import</span> <span class="fn">dataclass</span>, <span class="fn">field</span>
+
+<span class="op">@</span><span class="fn">dataclass</span>
+<span class="kw">class</span> <span class="cls">Producto</span>:
+    <span class="bi">nombre</span>: <span class="cls">str</span>
+    <span class="bi">precio</span>: <span class="cls">float</span>
+    <span class="bi">tags</span>: <span class="cls">list</span>[<span class="cls">str</span>] <span class="op">=</span> <span class="fn">field</span>(<span class="bi">default_factory</span><span class="op">=</span><span class="fn">list</span>)
+
+    <span class="kw">def</span> <span class="fn">con_iva</span>(<span class="bi">self</span>, <span class="bi">tasa</span><span class="op">=</span><span class="num">0.16</span>):
+        <span class="kw">return</span> <span class="bi">self</span>.<span class="bi">precio</span> <span class="op">*</span> (<span class="num">1</span> <span class="op">+</span> <span class="bi">tasa</span>)
+
+<span class="bi">p</span> <span class="op">=</span> <span class="cls">Producto</span>(<span class="str">"Libro"</span>, <span class="num">150.0</span>, [<span class="str">"educación"</span>])
+<span class="fn">print</span>(<span class="bi">p</span>)          <span class="cmt"># Producto(nombre='Libro', precio=150.0, ...)</span>
+<span class="fn">print</span>(<span class="bi">p</span>.<span class="fn">con_iva</span>())  <span class="cmt"># 174.0</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 EXCEPCIONES -->
+  <section class="section" id="excepciones">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <div class="section-icon" style="background:rgba(247,131,172,0.12);">🛡️</div>
+      <h2 style="color: var(--py-pink);">Manejo de Excepciones</h2>
+    </div>
+    <p class="section-desc">Python usa try/except/else/finally para manejo robusto de errores. Las excepciones son clases.</p>
+
+    <div class="two-col">
+      <div>
+        <div class="highlight-box pink">
+          <h4>🩷 try / except / else / finally</h4>
+          <div class="code"><span class="kw">try</span>:
+    <span class="bi">resultado</span> <span class="op">=</span> <span class="num">10</span> <span class="op">/</span> <span class="num">0</span>
+
+<span class="kw">except</span> <span class="cls">ZeroDivisionError</span>:
+    <span class="fn">print</span>(<span class="str">"¡División por cero!"</span>)
+
+<span class="kw">except</span> (<span class="cls">TypeError</span>, <span class="cls">ValueError</span>) <span class="kw">as</span> <span class="bi">e</span>:
+    <span class="fn">print</span>(<span class="str">f"Error: {<span class="bi">e</span>}"</span>)
+
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Sin errores"</span>)  <span class="cmt"># si no hubo excepción</span>
+
+<span class="kw">finally</span>:
+    <span class="fn">print</span>(<span class="str">"Siempre ejecuta"</span>)</div>
+        </div>
+      </div>
+      <div>
+        <div class="highlight-box">
+          <h4>🔵 Excepciones personalizadas</h4>
+          <div class="code"><span class="kw">class</span> <span class="cls">SaldoInsuficienteError</span>(<span class="cls">Exception</span>):
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="bi">self</span>, <span class="bi">saldo</span>, <span class="bi">monto</span>):
+        <span class="bi">self</span>.<span class="bi">saldo</span> <span class="op">=</span> <span class="bi">saldo</span>
+        <span class="bi">self</span>.<span class="bi">monto</span> <span class="op">=</span> <span class="bi">monto</span>
+        <span class="fn">super</span>().<span class="fn">__init__</span>(
+            <span class="str">f"Saldo {<span class="bi">saldo</span>} < monto {<span class="bi">monto</span>}"</span>
+        )
+
+<span class="kw">def</span> <span class="fn">retirar</span>(<span class="bi">saldo</span>, <span class="bi">monto</span>):
+    <span class="kw">if</span> <span class="bi">monto</span> <span class="op">></span> <span class="bi">saldo</span>:
+        <span class="kw">raise</span> <span class="cls">SaldoInsuficienteError</span>(<span class="bi">saldo</span>, <span class="bi">monto</span>)
+    <span class="kw">return</span> <span class="bi">saldo</span> <span class="op">-</span> <span class="bi">monto</span></div>
+        </div>
+
+        <div class="highlight-box green">
+          <h4>🟢 Context Managers (with)</h4>
+          <div class="code"><span class="cmt"># Archivos se cierran solos</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"datos.txt"</span>, <span class="str">"r"</span>) <span class="kw">as</span> <span class="bi">f</span>:
+    <span class="bi">contenido</span> <span class="op">=</span> <span class="bi">f</span>.<span class="fn">read</span>()
+
+<span class="cmt"># contextlib</span>
+<span class="kw">from</span> <span class="bi">contextlib</span> <span class="kw">import</span> <span class="fn">suppress</span>
+<span class="kw">with</span> <span class="fn">suppress</span>(<span class="cls">FileNotFoundError</span>):
+    <span class="fn">open</span>(<span class="str">"no_existe.txt"</span>)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 MÓDULOS -->
+  <section class="section" id="modulos">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <div class="section-icon" style="background:rgba(204,93,232,0.12);">📦</div>
+      <h2 style="color: var(--py-violet);">Módulos y Paquetes</h2>
+    </div>
+    <p class="section-desc">La biblioteca estándar de Python es enorme. pip te permite instalar miles de paquetes externos.</p>
+
+    <div class="highlight-box violet" style="margin-bottom: 16px;">
+      <h4>🟣 Importaciones</h4>
+      <div class="code"><span class="kw">import</span> <span class="bi">os</span>                    <span class="cmt"># módulo completo</span>
+<span class="kw">import</span> <span class="bi">os.path</span> <span class="kw">as</span> <span class="bi">osp</span>       <span class="cmt"># con alias</span>
+<span class="kw">from</span> <span class="bi">pathlib</span> <span class="kw">import</span> <span class="cls">Path</span>    <span class="cmt"># solo lo que necesitas</span>
+<span class="kw">from</span> <span class="bi">typing</span> <span class="kw">import</span> <span class="cls">Optional</span>, <span class="cls">Union</span>
+
+<span class="cmt"># Librería estándar útil</span>
+<span class="kw">import</span> <span class="bi">json</span>        <span class="cmt"># JSON</span>
+<span class="kw">import</span> <span class="bi">re</span>          <span class="cmt"># Expresiones regulares</span>
+<span class="kw">import</span> <span class="bi">datetime</span>    <span class="cmt"># Fechas y horas</span>
+<span class="kw">import</span> <span class="bi">itertools</span>   <span class="cmt"># Iteradores avanzados</span>
+<span class="kw">import</span> <span class="bi">functools</span>   <span class="cmt"># Funciones de orden superior</span>
+<span class="kw">import</span> <span class="bi">collections</span> <span class="cmt"># Estructuras especializadas</span></div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">🌐 Web & APIs</div>
+        <div class="code" style="font-size:11px;"><span class="cmt"># pip install requests httpx</span>
+<span class="kw">import</span> <span class="bi">requests</span>
+<span class="bi">r</span> <span class="op">=</span> <span class="bi">requests</span>.<span class="fn">get</span>(<span class="str">"https://api.github.com"</span>)
+<span class="bi">data</span> <span class="op">=</span> <span class="bi">r</span>.<span class="fn">json</span>()</div>
+      </div>
+      <div class="card">
+        <div class="card-label">📊 Datos & Ciencia</div>
+        <div class="code" style="font-size:11px;"><span class="cmt"># pip install numpy pandas matplotlib</span>
+<span class="kw">import</span> <span class="bi">numpy</span> <span class="kw">as</span> <span class="bi">np</span>
+<span class="kw">import</span> <span class="bi">pandas</span> <span class="kw">as</span> <span class="bi">pd</span>
+<span class="bi">df</span> <span class="op">=</span> <span class="bi">pd</span>.<span class="fn">read_csv</span>(<span class="str">"datos.csv"</span>)</div>
+      </div>
+      <div class="card">
+        <div class="card-label">🤖 IA & ML</div>
+        <div class="code" style="font-size:11px;"><span class="cmt"># pip install scikit-learn torch</span>
+<span class="kw">from</span> <span class="bi">sklearn.linear_model</span> <span class="kw">import</span> <span class="cls">LinearRegression</span>
+<span class="bi">modelo</span> <span class="op">=</span> <span class="cls">LinearRegression</span>()
+<span class="bi">modelo</span>.<span class="fn">fit</span>(<span class="bi">X_train</span>, <span class="bi">y_train</span>)</div>
+      </div>
+      <div class="card">
+        <div class="card-label">🔧 Utilidades</div>
+        <div class="code" style="font-size:11px;"><span class="cmt"># pip install pydantic rich typer</span>
+<span class="kw">from</span> <span class="bi">pydantic</span> <span class="kw">import</span> <span class="cls">BaseModel</span>
+<span class="kw">from</span> <span class="bi">rich</span> <span class="kw">import</span> <span class="fn">print</span> <span class="kw">as</span> <span class="fn">rprint</span>
+<span class="kw">import</span> <span class="bi">typer</span></div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:16px;">
+      <h4>🔵 Crear tu propio módulo</h4>
+      <div class="code"><span class="cmt"># mi_modulo.py</span>
+<span class="bi">PI</span> <span class="op">=</span> <span class="num">3.14159</span>
+
+<span class="kw">def</span> <span class="fn">area_circulo</span>(<span class="bi">r</span>):
+    <span class="kw">return</span> <span class="bi">PI</span> <span class="op">*</span> <span class="bi">r</span> <span class="op">**</span> <span class="num">2</span>
+
+<span class="kw">if</span> <span class="bi">__name__</span> <span class="op">==</span> <span class="str">"__main__"</span>:
+    <span class="fn">print</span>(<span class="fn">area_circulo</span>(<span class="num">5</span>))  <span class="cmt"># Ejecuta solo si es el script principal</span>
+
+<span class="cmt"># main.py</span>
+<span class="kw">from</span> <span class="bi">mi_modulo</span> <span class="kw">import</span> <span class="fn">area_circulo</span>
+<span class="fn">print</span>(<span class="fn">area_circulo</span>(<span class="num">3</span>))  <span class="cmt"># 28.27...</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <svg width="40" height="40" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 1rem; display:block; opacity:0.4;">
+    <path d="M40 8 C25 8, 14 16, 14 28 L14 36 C14 40, 17 42, 21 42 L40 42 C44 42, 46 44, 46 48 L46 58 C46 62, 43 64, 40 64 L26 64" fill="none" stroke="#4a9eff" stroke-width="10" stroke-linecap="round"/>
+    <path d="M40 72 C55 72, 66 64, 66 52 L66 44 C66 40, 63 38, 59 38 L40 38 C36 38, 34 36, 34 32 L34 22 C34 18, 37 16, 40 16 L54 16" fill="none" stroke="#ffd43b" stroke-width="10" stroke-linecap="round"/>
+  </svg>
+  <p>Guía de Python · 9 conceptos fundamentales · <span>python.org</span></p>
+</footer>
+
+</body>
+</html>
